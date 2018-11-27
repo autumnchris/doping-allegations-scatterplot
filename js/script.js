@@ -43,7 +43,34 @@ function displayGraph() {
       .attr('data-xvalue', (d) => d.Year)
       .attr('data-yvalue', (d) => d3.timeParse('%M:%S')(d.Time))
       .attr('fill', (d) => d.Doping ? '#d24646' : '#46d246')
-      .attr('stroke', '#522d86');
+      .attr('stroke', '#522d86')
+      .on('mouseover', handleMouseover)
+      .on('mouseout', handleMouseout);
+
+    function handleMouseover(d) {
+      const tooltip = d3.select('.graph')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+        .attr('data-year', () => d.Year);
+
+      d3.select(this)
+        .attr('r', 12);
+
+      tooltip.transition()
+        .duration(200)
+        .style('opacity', 0.9);
+      tooltip.html(`${d.Name}: ${d.Nationality}<br/>Year: ${d.Year}, Time: ${d.Time}<br/>${d.Doping ? d.Doping : 'No doping allegations'}`)
+        .style('left', `${d3.event.pageX + 12}px`)
+        .style('top', `${d3.event.pageY - 32}px`);
+    }
+
+    function handleMouseout() {
+      d3.select(this)
+        .attr('r', 8);
+
+      d3.select('.tooltip').remove();
+    }
   }).catch(() => {
     document.querySelector('.error-message').style.display = 'block';
   });
