@@ -31,6 +31,19 @@ function displayGraph() {
       .attr('transform', `translate(${padding.left}, 0)`)
       .call(d3.axisLeft(yScale)
       .tickFormat(d3.timeFormat('%M:%S')));
+
+    svg.selectAll('circle')
+      .data(dataset.data)
+      .enter()
+      .append('circle')
+      .attr('class', 'dot')
+      .attr('cx', (d) => xScale(d.Year))
+      .attr('cy', (d) => yScale(d3.timeParse('%M:%S')(d.Time)))
+      .attr('r', 8)
+      .attr('data-xvalue', (d) => d.Year)
+      .attr('data-yvalue', (d) => d3.timeParse('%M:%S')(d.Time))
+      .attr('fill', (d) => d.Doping ? '#d24646' : '#46d246')
+      .attr('stroke', '#522d86');
   }).catch(() => {
     document.querySelector('.error-message').style.display = 'block';
   });
