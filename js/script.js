@@ -32,6 +32,12 @@ function displayGraph() {
       .call(d3.axisLeft(yScale)
       .tickFormat(d3.timeFormat('%M:%S')));
 
+    svg.append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -400)
+      .attr('y', 30)
+      .text('Completion Time (MM:SS)');
+
     svg.selectAll('circle')
       .data(dataset.data)
       .enter()
