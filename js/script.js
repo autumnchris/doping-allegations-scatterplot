@@ -46,8 +46,6 @@ function displayGraph() {
       .attr('cx', (d) => xScale(d.Year))
       .attr('cy', (d) => yScale(d3.timeParse('%M:%S')(d.Time)))
       .attr('r', 8)
-      .attr('data-xvalue', (d) => d.Year)
-      .attr('data-yvalue', (d) => d3.timeParse('%M:%S')(d.Time))
       .attr('fill', (d) => d.Doping ? '#d24646' : '#46d246')
       .attr('stroke', '#522d86')
       .on('mouseover', handleMouseover)
@@ -57,8 +55,7 @@ function displayGraph() {
       const tooltip = d3.select('.graph')
         .append('div')
         .attr('class', 'tooltip')
-        .style('opacity', 0)
-        .attr('data-year', () => d.Year);
+        .style('opacity', 0);
 
       d3.select(this)
         .attr('r', 12);
