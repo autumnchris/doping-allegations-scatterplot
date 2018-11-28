@@ -77,6 +77,40 @@ function displayGraph() {
 
       d3.select('.tooltip').remove();
     }
+
+    const legendData = [
+      {
+        doping: true,
+        color: '#d24646'
+      },
+      {
+        doping: false,
+        color: '#46d246'
+      }
+    ];
+    const legend = svg.append('g')
+      .attr('class', 'legend')
+      .attr('transform', 'translate(-10, 30)');
+
+    legend.selectAll('rect')
+      .data(legendData)
+      .enter()
+      .append('rect')
+      .attr('x', w - 200)
+      .attr('y', (d, i) => i * 24 - 12)
+      .attr('width', 30)
+      .attr('height', 15)
+      .attr('fill', (d) => d.color)
+      .attr('stroke', '#522d86');
+
+    legend.selectAll('text')
+      .data(legendData)
+      .enter()
+      .append('text')
+      .attr('x', w - 160)
+      .attr('y', (d, i) => i * 24)
+      .text(d => d.doping ? 'Doping Allegations' : 'No Doping Allegations')
+      .style('font-size', '0.7rem');
   }).catch(() => {
     document.querySelector('.error-message').style.display = 'block';
   });
