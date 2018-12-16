@@ -4,6 +4,7 @@ html {
 
 h1 {
   font-size: 1.8rem;
+  line-height: 24px;
   padding: 30px 0 10px;
 }
 
@@ -15,10 +16,20 @@ main {
   padding: 25px 0 70px;
 }
 
+.graph {
+  height: 80vh;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  position: relative;
+  width: 100%;
+}
+
 svg {
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 1px 1px 13px 0px #828282;
+}
+
+.y-label {
+  font-size: 0.7rem;
 }
 
 .tooltip {
@@ -64,4 +75,29 @@ footer a:hover,
 footer a:active,
 footer a:focus {
   color: #522d86;
+}
+
+@media only screen and (max-width: 600px) {
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (orientation: landscape) {
+
+  .chart {
+    height: 100vh;
+  }
+}
+
+@media only screen (orientation: landscape) and (max-height: 800px) {
+
+  .chart {
+    height: 200vh;
+  }
 }

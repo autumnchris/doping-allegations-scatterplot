@@ -1,40 +1,33 @@
 function displayGraph() {
 
   axios.get('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json').then((dataset) => {
-    const w = 700;
-    const h = 500;
     const padding = {
       top: 40,
       right: 30,
-      bottom: 100,
+      bottom: 110,
       left: 100
     };
+    let w;
+    let h;
+
     const xScale = d3.scaleLinear()
-      .domain(d3.extent(dataset.data, (d) => d.Year))
-      .range([padding.left, w - padding.right]);
+      .domain(d3.extent(dataset.data, (d) => d.Year));
     const yScale = d3.scaleTime()
-      .domain([d3.max(dataset.data, (d) => d3.timeParse('%M:%S')(d.Time)), d3.min(dataset.data, (d) => d3.timeParse('%M:%S')(d.Time))])
-      .range([h - padding.top, padding.bottom]);
+      .domain([d3.max(dataset.data, (d) => d3.timeParse('%M:%S')(d.Time)), d3.min(dataset.data, (d) => d3.timeParse('%M:%S')(d.Time))]);
     const svg = d3.select('.graph')
-      .append('svg')
-      .attr('width', w)
-      .attr('height', h);
+      .append('svg');
 
     svg.append('g')
-      .attr('class', 'x-axis')
-      .attr('transform', `translate(0, ${h - padding.top})`)
-      .call(d3.axisBottom(xScale)
-      .tickFormat((d) => d));
+      .attr('class', 'x-axis');
 
     svg.append('g')
       .attr('class', 'y-axis')
-      .attr('transform', `translate(${padding.left}, 0)`)
-      .call(d3.axisLeft(yScale)
-      .tickFormat(d3.timeFormat('%M:%S')));
+      .attr('transform', `translate(${padding.left}, 0)`);
 
     svg.append('text')
+      .attr('class', 'y-label')
       .attr('transform', 'rotate(-90)')
-      .attr('x', -400)
+      .attr('x', -280)
       .attr('y', 30)
       .text('Completion Time (MM:SS)');
 
@@ -43,11 +36,9 @@ function displayGraph() {
       .enter()
       .append('circle')
       .attr('class', 'dot')
-      .attr('cx', (d) => xScale(d.Year))
-      .attr('cy', (d) => yScale(d3.timeParse('%M:%S')(d.Time)))
       .attr('r', 8)
       .attr('fill', (d) => d.Doping ? '#d24646' : '#46d246')
-      .attr('stroke', '#522d86')
+      .attr('stroke', '#fff')
       .on('mouseover', handleMouseover)
       .on('mouseout', handleMouseout);
 
@@ -64,8 +55,8 @@ function displayGraph() {
         .duration(200)
         .style('opacity', 0.9);
       tooltip.html(`${d.Name}: ${d.Nationality}<br/>Year: ${d.Year}, Time: ${d.Time}<br/>${d.Doping ? d.Doping : 'No doping allegations'}`)
-        .style('left', `${d3.event.pageX + 12}px`)
-        .style('top', `${d3.event.pageY - 32}px`);
+        .style('left', `${d3.event.pageX - 160}px`)
+        .style('top', `${d3.event.pageY - 200}px`);
     }
 
     function handleMouseout() {
@@ -93,21 +84,56 @@ function displayGraph() {
       .data(legendData)
       .enter()
       .append('rect')
-      .attr('x', w - 200)
+      .attr('class', 'legend-color')
+      .attr('x', 120)
       .attr('y', (d, i) => i * 24 - 12)
       .attr('width', 30)
       .attr('height', 15)
       .attr('fill', (d) => d.color)
-      .attr('stroke', '#522d86');
+      .attr('stroke', '#fff');
 
     legend.selectAll('text')
       .data(legendData)
       .enter()
       .append('text')
-      .attr('x', w - 160)
+      .attr('class', 'legend-label')
+      .attr('x', 160)
       .attr('y', (d, i) => i * 24)
       .text(d => d.doping ? 'Doping Allegations' : 'No Doping Allegations')
       .style('font-size', '0.7rem');
+
+    function resize() {
+      w = parseInt(d3.select('.graph').style('width')) * 0.9;
+      h = parseInt(d3.select('.graph').style('height'));
+
+      if (w < 600) {
+        w = 600;
+      }
+
+      xScale.range([padding.left, w - padding.right]);
+      yScale.range([h - padding.top, padding.bottom]);
+
+      svg.attr('width', w)
+        .attr('height', h);
+
+      svg.select('.x-axis')
+        .attr('transform', `translate(0, ${h - padding.top})`)
+        .call(d3.axisBottom(xScale)
+        .tickFormat((d) => d));
+
+      svg.select('.y-axis')
+        .call(d3.axisLeft(yScale)
+        .tickFormat(d3.timeFormat('%M:%S')));
+
+      svg.selectAll('.dot')
+        .attr('cx', (d) => xScale(d.Year))
+        .attr('cy', (d) => yScale(d3.timeParse('%M:%S')(d.Time)));
+    }
+
+    resize();
+
+    d3.select(window)
+      .on('resize', resize);
   }).catch(() => {
     document.querySelector('.error-message').style.display = 'block';
   });
