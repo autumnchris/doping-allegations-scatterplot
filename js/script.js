@@ -2,10 +2,10 @@ function displayGraph() {
 
   axios.get('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json').then((dataset) => {
     const padding = {
-      top: 40,
-      right: 30,
-      bottom: 110,
-      left: 100
+      top: 50,
+      right: 40,
+      bottom: 120,
+      left: 110
     };
     let w;
     let h;
@@ -17,6 +17,21 @@ function displayGraph() {
     const svg = d3.select('.graph')
       .append('svg');
 
+    const legendData = [
+      {
+        doping: true,
+        color: '#d24646'
+      },
+      {
+        doping: false,
+        color: '#006699'
+      }
+    ];
+
+    const legend = svg.append('g')
+      .attr('class', 'legend')
+      .attr('transform', 'translate(-10, 40)');
+
     svg.append('g')
       .attr('class', 'x-axis');
 
@@ -27,8 +42,8 @@ function displayGraph() {
     svg.append('text')
       .attr('class', 'y-label')
       .attr('transform', 'rotate(-90)')
-      .attr('x', -280)
-      .attr('y', 30)
+      .attr('x', -290)
+      .attr('y', 40)
       .text('Completion Time (MM:SS)');
 
     svg.selectAll('circle')
@@ -37,7 +52,7 @@ function displayGraph() {
       .append('circle')
       .attr('class', 'dot')
       .attr('r', 8)
-      .attr('fill', (d) => d.Doping ? '#d24646' : '#46d246')
+      .attr('fill', (d) => d.Doping ? '#d24646' : '#006699')
       .attr('stroke', '#fff')
       .on('mouseover', handleMouseover)
       .on('mouseout', handleMouseout);
@@ -46,39 +61,26 @@ function displayGraph() {
       const tooltip = d3.select('.graph')
         .append('div')
         .attr('class', 'tooltip')
-        .style('opacity', 0);
+        .style('visibility', 'hidden');
 
       d3.select(this)
-        .attr('r', 12);
+        .attr('fill', '#ffbf00');
 
       tooltip.transition()
         .duration(200)
-        .style('opacity', 0.9);
+        .style('visibility', 'visible');
+
       tooltip.html(`${d.Name}: ${d.Nationality}<br/>Year: ${d.Year}, Time: ${d.Time}<br/>${d.Doping ? d.Doping : 'No doping allegations'}`)
-        .style('left', `${d3.event.pageX - 160}px`)
-        .style('top', `${d3.event.pageY - 200}px`);
+        .style('left', `${d3.select(this).attr('cx') - 80}px`)
+        .style('top', `${d3.select(this).attr('cy') - 110}px`);
     }
 
     function handleMouseout() {
       d3.select(this)
-        .attr('r', 8);
+        .attr('fill', (d) => d.Doping ? '#d24646' : '#006699');
 
       d3.select('.tooltip').remove();
     }
-
-    const legendData = [
-      {
-        doping: true,
-        color: '#d24646'
-      },
-      {
-        doping: false,
-        color: '#46d246'
-      }
-    ];
-    const legend = svg.append('g')
-      .attr('class', 'legend')
-      .attr('transform', 'translate(-10, 30)');
 
     legend.selectAll('rect')
       .data(legendData)
@@ -103,11 +105,20 @@ function displayGraph() {
       .style('font-size', '0.7rem');
 
     function resize() {
-      w = parseInt(d3.select('.graph').style('width')) * 0.9;
-      h = parseInt(d3.select('.graph').style('height'));
+      w = window.innerWidth * 0.9;
 
-      if (w < 600) {
-        w = 600;
+      if (w < 800) {
+        w = 800;
+        h = w * 0.8;
+      }
+      else {
+
+        if (window.innerWidth < window.innerHeight) {
+          h = window.innerHeight * 0.6;
+        }
+        else {
+          h = window.innerHeight * 0.8;
+        }
       }
 
       xScale.range([padding.left, w - padding.right]);
