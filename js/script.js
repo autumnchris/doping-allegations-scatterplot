@@ -1,7 +1,7 @@
 function displayGraph() {
 
   axios.get('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json').then((dataset) => {
-    const padding = {
+    const margin = {
       top: 50,
       right: 40,
       bottom: 120,
@@ -20,11 +20,11 @@ function displayGraph() {
     const legendData = [
       {
         doping: true,
-        color: '#d24646'
+        color: '#e18484'
       },
       {
         doping: false,
-        color: '#006699'
+        color: '#4ddbff'
       }
     ];
 
@@ -37,13 +37,14 @@ function displayGraph() {
 
     svg.append('g')
       .attr('class', 'y-axis')
-      .attr('transform', `translate(${padding.left}, 0)`);
+      .attr('transform', `translate(${margin.left}, 0)`);
 
     svg.append('text')
       .attr('class', 'y-label')
       .attr('transform', 'rotate(-90)')
       .attr('x', -290)
       .attr('y', 40)
+      .attr('fill', '#fff')
       .text('Completion Time (MM:SS)');
 
     svg.selectAll('circle')
@@ -51,9 +52,9 @@ function displayGraph() {
       .enter()
       .append('circle')
       .attr('class', 'dot')
-      .attr('r', 8)
-      .attr('fill', (d) => d.Doping ? '#d24646' : '#006699')
-      .attr('stroke', '#fff')
+      .attr('r', 5)
+      .attr('fill', d => d.Doping ? '#e18484' : '#4ddbff')
+      .attr('stroke', '#333')
       .on('mouseover', handleMouseover)
       .on('mouseout', handleMouseout);
 
@@ -64,20 +65,20 @@ function displayGraph() {
         .style('visibility', 'hidden');
 
       d3.select(this)
-        .attr('fill', '#ffbf00');
+        .attr('r', 8);
 
       tooltip.transition()
         .duration(200)
         .style('visibility', 'visible');
 
       tooltip.html(`${d.Name}: ${d.Nationality}<br/>Year: ${d.Year}, Time: ${d.Time}<br/>${d.Doping ? d.Doping : 'No doping allegations'}`)
-        .style('left', `${d3.select(this).attr('cx') - 80}px`)
-        .style('top', `${d3.select(this).attr('cy') - 110}px`);
+        .style('left', `${d3.event.pageX - 50}px`)
+        .style('top', `${d3.event.pageY - 100}px`);
     }
 
     function handleMouseout() {
       d3.select(this)
-        .attr('fill', (d) => d.Doping ? '#d24646' : '#006699');
+        .attr('r', 5);
 
       d3.select('.tooltip').remove();
     }
@@ -92,7 +93,7 @@ function displayGraph() {
       .attr('width', 30)
       .attr('height', 15)
       .attr('fill', (d) => d.color)
-      .attr('stroke', '#fff');
+      .attr('stroke', '#333');
 
     legend.selectAll('text')
       .data(legendData)
@@ -101,6 +102,7 @@ function displayGraph() {
       .attr('class', 'legend-label')
       .attr('x', 160)
       .attr('y', (d, i) => i * 24)
+      .attr('fill', '#fff')
       .text(d => d.doping ? 'Doping Allegations' : 'No Doping Allegations')
       .style('font-size', '0.7rem');
 
@@ -121,14 +123,13 @@ function displayGraph() {
         }
       }
 
-      xScale.range([padding.left, w - padding.right]);
-      yScale.range([h - padding.top, padding.bottom]);
+      xScale.range([margin.left, w - margin.right]);
+      yScale.range([h - margin.top, margin.bottom]);
 
-      svg.attr('width', w)
-        .attr('height', h);
+      svg.attr('viewBox', `0 0 ${w} ${h}`);
 
       svg.select('.x-axis')
-        .attr('transform', `translate(0, ${h - padding.top})`)
+        .attr('transform', `translate(0, ${h - margin.top})`)
         .call(d3.axisBottom(xScale)
         .tickFormat((d) => d));
 
