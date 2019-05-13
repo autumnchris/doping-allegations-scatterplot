@@ -1,32 +1,31 @@
 function displayGraph() {
+  const margin = {
+    top: 50,
+    right: 40,
+    bottom: 120,
+    left: 110
+  };
+  let w;
+  let h;
+  const legendData = [
+    {
+      doping: true,
+      color: '#e18484'
+    },
+    {
+      doping: false,
+      color: '#4ddbff'
+    }
+  ];
 
-  axios.get('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json').then((dataset) => {
-    const margin = {
-      top: 50,
-      right: 40,
-      bottom: 120,
-      left: 110
-    };
-    let w;
-    let h;
-
+  d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json').then(dataset => {
     const xScale = d3.scaleLinear()
-      .domain(d3.extent(dataset.data, (d) => d.Year));
+      .domain(d3.extent(dataset, (d) => d.Year));
     const yScale = d3.scaleTime()
-      .domain([d3.max(dataset.data, (d) => d3.timeParse('%M:%S')(d.Time)), d3.min(dataset.data, (d) => d3.timeParse('%M:%S')(d.Time))]);
+      .domain([d3.max(dataset, (d) => d3.timeParse('%M:%S')(d.Time)), d3.min(dataset, (d) => d3.timeParse('%M:%S')(d.Time))]);
+
     const svg = d3.select('.graph')
       .append('svg');
-
-    const legendData = [
-      {
-        doping: true,
-        color: '#e18484'
-      },
-      {
-        doping: false,
-        color: '#4ddbff'
-      }
-    ];
 
     const legend = svg.append('g')
       .attr('class', 'legend')
@@ -48,7 +47,7 @@ function displayGraph() {
       .text('Completion Time (MM:SS)');
 
     svg.selectAll('circle')
-      .data(dataset.data)
+      .data(dataset)
       .enter()
       .append('circle')
       .attr('class', 'dot')
@@ -146,7 +145,7 @@ function displayGraph() {
 
     d3.select(window)
       .on('resize', resize);
-  }).catch(() => {
+  }).catch(err => {
     document.querySelector('.error-message').style.display = 'block';
   });
 }
