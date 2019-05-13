@@ -5,8 +5,8 @@ function displayGraph() {
     bottom: 120,
     left: 110
   };
-  let w;
-  let h;
+  const w = 800;
+  const h = w * 0.6;
   const legendData = [
     {
       doping: true,
@@ -20,23 +20,31 @@ function displayGraph() {
 
   d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json').then(dataset => {
     const xScale = d3.scaleLinear()
-      .domain(d3.extent(dataset, (d) => d.Year));
+      .domain(d3.extent(dataset, (d) => d.Year))
+      .range([margin.left, w - margin.right]);
     const yScale = d3.scaleTime()
-      .domain([d3.max(dataset, (d) => d3.timeParse('%M:%S')(d.Time)), d3.min(dataset, (d) => d3.timeParse('%M:%S')(d.Time))]);
+      .domain([d3.max(dataset, (d) => d3.timeParse('%M:%S')(d.Time)), d3.min(dataset, (d) => d3.timeParse('%M:%S')(d.Time))])
+      .range([h - margin.top, margin.bottom]);
 
     const svg = d3.select('.graph')
-      .append('svg');
+      .append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`);
 
     const legend = svg.append('g')
       .attr('class', 'legend')
       .attr('transform', 'translate(-10, 40)');
 
     svg.append('g')
-      .attr('class', 'x-axis');
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(0, ${h - margin.top})`)
+      .call(d3.axisBottom(xScale)
+      .tickFormat((d) => d));
 
     svg.append('g')
       .attr('class', 'y-axis')
-      .attr('transform', `translate(${margin.left}, 0)`);
+      .attr('transform', `translate(${margin.left}, 0)`)
+      .call(d3.axisLeft(yScale)
+      .tickFormat(d3.timeFormat('%M:%S')));
 
     svg.append('text')
       .attr('class', 'y-label')
@@ -52,6 +60,8 @@ function displayGraph() {
       .append('circle')
       .attr('class', 'dot')
       .attr('r', 5)
+      .attr('cx', (d) => xScale(d.Year))
+      .attr('cy', (d) => yScale(d3.timeParse('%M:%S')(d.Time)))
       .attr('fill', d => d.Doping ? '#e18484' : '#4ddbff')
       .attr('stroke', '#333')
       .on('mouseover', handleMouseover)
@@ -104,47 +114,6 @@ function displayGraph() {
       .attr('fill', '#fff')
       .text(d => d.doping ? 'Doping Allegations' : 'No Doping Allegations')
       .style('font-size', '0.7rem');
-
-    function resize() {
-      w = window.innerWidth * 0.9;
-
-      if (w < 800) {
-        w = 800;
-        h = w * 0.8;
-      }
-      else {
-
-        if (window.innerWidth < window.innerHeight) {
-          h = window.innerHeight * 0.6;
-        }
-        else {
-          h = window.innerHeight * 0.8;
-        }
-      }
-
-      xScale.range([margin.left, w - margin.right]);
-      yScale.range([h - margin.top, margin.bottom]);
-
-      svg.attr('viewBox', `0 0 ${w} ${h}`);
-
-      svg.select('.x-axis')
-        .attr('transform', `translate(0, ${h - margin.top})`)
-        .call(d3.axisBottom(xScale)
-        .tickFormat((d) => d));
-
-      svg.select('.y-axis')
-        .call(d3.axisLeft(yScale)
-        .tickFormat(d3.timeFormat('%M:%S')));
-
-      svg.selectAll('.dot')
-        .attr('cx', (d) => xScale(d.Year))
-        .attr('cy', (d) => yScale(d3.timeParse('%M:%S')(d.Time)));
-    }
-
-    resize();
-
-    d3.select(window)
-      .on('resize', resize);
   }).catch(err => {
     document.querySelector('.error-message').style.display = 'block';
   });
