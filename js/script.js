@@ -51,7 +51,7 @@ function displayGraph() {
       .attr('transform', 'rotate(-90)')
       .attr('x', -290)
       .attr('y', 40)
-      .attr('fill', '#fff')
+      .attr('fill', 'hsl(0, 0%, 100%)')
       .text('Completion Time (MM:SS)');
 
     svg.selectAll('circle')
@@ -63,7 +63,7 @@ function displayGraph() {
       .attr('cx', (d) => xScale(d.Year))
       .attr('cy', (d) => yScale(d3.timeParse('%M:%S')(d.Time)))
       .attr('fill', d => d.Doping ? '#e18484' : '#4ddbff')
-      .attr('stroke', '#333')
+      .attr('stroke', 'hsl(0, 0%, 20%)')
       .on('mouseover', handleMouseover)
       .on('mouseout', handleMouseout);
 
@@ -102,7 +102,7 @@ function displayGraph() {
       .attr('width', 30)
       .attr('height', 15)
       .attr('fill', (d) => d.color)
-      .attr('stroke', '#333');
+      .attr('stroke', 'hsl(0, 0%, 20%)');
 
     legend.selectAll('text')
       .data(legendData)
@@ -111,7 +111,7 @@ function displayGraph() {
       .attr('class', 'legend-label')
       .attr('x', 160)
       .attr('y', (d, i) => i * 24)
-      .attr('fill', '#fff')
+      .attr('fill', 'hsl(0, 0%, 100%)')
       .text(d => d.doping ? 'Doping Allegations' : 'No Doping Allegations')
       .style('font-size', '0.7rem');
   }).catch(err => {
