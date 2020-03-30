@@ -120,3 +120,5 @@ function displayGraph() {
 }
 
 displayGraph();
+
+document.querySelector('.current-year').innerHTML = new Date().getFullYear();
