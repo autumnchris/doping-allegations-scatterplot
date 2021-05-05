@@ -125,7 +125,7 @@ h2 {
 .tooltip {
   background: hsl(0, 0%, 100%);
   -webkit-border-radius: 3px;
-  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
   border-radius: 3px;
   -webkit-box-shadow: 1px 1px 13px 0px hsl(0, 0%, 51%);
   -moz-box-shadow: 1px 1px 13px 0px hsl(0, 0%, 51%);
