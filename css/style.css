@@ -3,7 +3,6 @@
 html {
   background: transparent;
   -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   color: hsl(0, 0%, 100%);
   height: 100%;
@@ -14,6 +13,7 @@ html {
 body {
   background: hsl(0, 0%, 20%);
   min-height: 100%;
+  -ms-scroll-chaining: none;
   overscroll-behavior: none;
   padding: 0 20px;
   position: relative;
@@ -45,7 +45,6 @@ h4,
 h5,
 h6 {
   -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin-top: 0;
 }
@@ -59,7 +58,6 @@ footer,
 p,
 svg {
   -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -90,14 +88,11 @@ select:focus,
 textarea:focus,
 [tabindex]:focus {
   -webkit-box-shadow: 0 0 3px 3px hsla(203, 95%, 62%, 0.8);
-  -moz-box-shadow: 0 0 3px 3px hsla(203, 95%, 62%, 0.8);
   box-shadow: 0 0 3px 3px hsla(203, 95%, 62%, 0.8);
   outline: none;
 }
 
 .message {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
   border-radius: 5px;
   line-height: 1.55;
   margin: 20px auto;
@@ -124,11 +119,8 @@ h2 {
 
 .tooltip {
   background: hsl(0, 0%, 100%);
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
   -webkit-box-shadow: 1px 1px 13px 0px hsl(0, 0%, 51%);
-  -moz-box-shadow: 1px 1px 13px 0px hsl(0, 0%, 51%);
   box-shadow: 1px 1px 13px 0px hsl(0, 0%, 51%);
   color: hsl(0, 0%, 20%);
   font-size: 0.8rem;
@@ -160,6 +152,8 @@ noscript .info-message {
   position: absolute;
   text-align: center;
   top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 
