@@ -1,6 +1,8 @@
 # Doping Allegations Scatterplot
 
-My project for the [Visualize Data with a Scatterplot Graph challenge](https://learn.freecodecamp.org/data-visualization/data-visualization-projects/visualize-data-with-a-scatterplot-graph) as part of the curriculum for the Data Visualization Certification on [freeCodeCamp](https://www.freecodecamp.org).
+A D3.js scatterplot that presents the top 35 fastest completions of the Alpe d'Huez and whether or not the associated cyclist has been accused of doping during that period.
+
+Inspired by the [Visualize Data with a Scatterplot Graph challenge](https://www.freecodecamp.org/learn/data-visualization/data-visualization-projects/visualize-data-with-a-scatterplot-graph) as part of the curriculum for the [Data Visualization Certification](https://www.freecodecamp.org/learn/data-visualization) on [freeCodeCamp](https://www.freecodecamp.org).
 
 ---
 
