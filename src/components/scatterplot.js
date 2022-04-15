@@ -100,9 +100,9 @@ const Scatterplot = () => {
       .duration(200)
       .style('visibility', 'visible');
 
-    tooltip.html(`${d.Name}: ${d.Nationality}<br/>Year: ${d.Year}, Time: ${d.Time}<br/>${d.Doping ? d.Doping : 'No doping allegations'}`)
-      .style('left', `${(event.pageX - 50)}px`)
-      .style('top', `${(event.pageY - 100)}px`);
+    tooltip.html(`<strong>${d.Name}, ${d.Nationality}</strong><br/><strong>Year:</strong> ${d.Year}<br/><strong>Time:</strong> ${d.Time}<br/>${d.Doping ? d.Doping : 'No doping allegations'}`)
+      .style('left', `${(event.pageX - 53)}px`)
+      .style('top', `${(event.pageY + 25)}px`);
   }
 
   function handleMouseout(event) {
