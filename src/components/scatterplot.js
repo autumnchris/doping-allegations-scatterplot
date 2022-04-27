@@ -38,7 +38,7 @@ const Scatterplot = () => {
         .domain([d3.max(dataset, (d) => d3.timeParse('%M:%S')(d.Time)), d3.min(dataset, (d) => d3.timeParse('%M:%S')(d.Time))])
         .range([h - margin.top, margin.bottom]);
 
-      d3.select('.legend').selectAll('rect')
+      d3.select('.legend').selectAll('.legend-color')
         .data(legendData)
         .enter()
         .append('rect')
@@ -50,7 +50,7 @@ const Scatterplot = () => {
         .attr('fill', (d) => d.color)
         .attr('stroke', 'hsl(0, 0%, 20%)');
       
-      d3.select('.legend').selectAll('text')
+      d3.select('.legend').selectAll('.legend-label')
         .data(legendData)
         .enter()
         .append('text')
@@ -69,7 +69,7 @@ const Scatterplot = () => {
         .call(d3.axisLeft(yScale)
         .tickFormat(d3.timeFormat('%M:%S')));
 
-      d3.select('.scatterplot').selectAll('circle')
+      d3.select('.scatterplot').selectAll('.dot')
         .data(dataset)
         .enter()
         .append('circle')
