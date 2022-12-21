@@ -1,5 +1,5 @@
 import React from 'react';
-import Scatterplot from './scatterplot';
+import Scatterplot from './Scatterplot';
 
 const App = () => {
   return (
