@@ -1,10 +1,11 @@
-import React from 'react';
-import { scaleLinear, scaleTime, extent, max, min, timeParse } from 'd3';
+import React, { useState } from 'react';
+import { select, scaleLinear, scaleTime, extent, max, min, timeParse } from 'd3';
 import Legend from './Legend';
 import Axis from './Axis';
 import Dot from './Dot';
+import Tooltip from './Tooltip';
 
-const Scatterplot = ({ dopingData, handleMouseEnter, handleMouseLeave }) => {
+const Scatterplot = ({ dopingData }) => {
   const margin = {
     top: 50,
     right: 40,
@@ -19,6 +20,30 @@ const Scatterplot = ({ dopingData, handleMouseEnter, handleMouseLeave }) => {
   const yScale = scaleTime()
     .domain([max(dopingData, (d) => timeParse('%M:%S')(d.Time)), min(dopingData, (d) => timeParse('%M:%S')(d.Time))])
     .range([h - margin.top, margin.bottom]);
+  
+  const [tooltip, setTooltip] = useState(null);
+
+  function handleMouseEnter(event, value) {
+    setTooltip({
+      name: value.Name,
+      nationality: value.Nationality,
+      year: value.Year,
+      time: value.Time,
+      allegation: value.Doping,
+      left: `${(event.pageX - 53)}px`,
+      top: `${(event.pageY + 25)}px`
+    });
+
+    select(event.currentTarget)
+      .attr('r', 8);
+  }
+
+  function handleMouseLeave(event) {
+    setTooltip(null);
+
+    select(event.currentTarget)
+      .attr('r', 5);
+  }
 
   return (
     <div className="graph-container">
@@ -29,6 +54,7 @@ const Scatterplot = ({ dopingData, handleMouseEnter, handleMouseLeave }) => {
         <text className="y-label" x="-290" y="40" transform="rotate(-90)">Completion Time (MM:SS)</text>
         {dopingData.map((dot, i) => <Dot key= {i} dot={dot} cx={xScale(dot.Year)} cy={yScale(timeParse('%M:%S')(dot.Time))} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />)}
       </svg>
+      {tooltip && <Tooltip tooltip={tooltip} />}
     </div>
   );
 }
