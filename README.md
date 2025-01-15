@@ -10,6 +10,10 @@ Inspired by the [Visualize Data with a Scatterplot Graph challenge](https://www.
 * [D3.js](https://d3js.org)
 * [React.js](https://reactjs.org)
 * [Sass](http://sass-lang.com)
+* JavaScript
+* CSS3
+* HTML5
+* [Node.js](https://nodejs.org/en)
 * [Webpack](https://webpack.js.org)
 * AJAX
 * [Babel](https://babeljs.io)
